@@ -1,52 +1,28 @@
-Blockly.defineBlocksWithJsonArray([
-  {
-    "type": "ADS1115_begin",
-    "message0": "inicializar ADS1115 direccion %1",
-    "args0": [{"type":"field_dropdown","name":"ADDR","options":[
-      ["0x48 (ADDR-GND)","0x48"],["0x49 (ADDR-VCC)","0x49"],
-      ["0x4A (ADDR-SDA)","0x4A"],["0x4B (ADDR-SCL)","0x4B"]]}],
-    "previousStatement": null,"nextStatement": null,"colour": 230,
-    "tooltip": "Inicializa el ADS1115. ADDR a GND = 0x48.","helpUrl": ""
-  },
-  {
-    "type": "ADS1115_set_gain",
-    "message0": "ADS1115 ganancia %1",
-    "args0": [{"type":"field_dropdown","name":"GAIN","options":[
-      ["+-6.144 V","0"],["+-4.096 V","1"],["+-2.048 V (default)","2"],
-      ["+-1.024 V","3"],["+-0.512 V","4"],["+-0.256 V","5"]]}],
-    "previousStatement": null,"nextStatement": null,"colour": 230,
-    "tooltip": "Rango PGA. Para sensores 3.3V usa +-4.096V.","helpUrl": ""
-  },
-  {
-    "type": "ADS1115_read_raw",
-    "message0": "ADS1115 RAW canal %1",
-    "args0": [{"type":"field_dropdown","name":"CHANNEL","options":[
-      ["A0","0"],["A1","1"],["A2","2"],["A3","3"]]}],
-    "output": "Number","colour": 160,
-    "tooltip": "Valor crudo -32768 a 32767.","helpUrl": ""
-  },
-  {
-    "type": "ADS1115_read_mv",
-    "message0": "ADS1115 voltaje mV canal %1",
-    "args0": [{"type":"field_dropdown","name":"CHANNEL","options":[
-      ["A0","0"],["A1","1"],["A2","2"],["A3","3"]]}],
-    "output": "Number","colour": 160,
-    "tooltip": "Voltaje en miliVoltios.","helpUrl": ""
-  },
-  {
-    "type": "ADS1115_read_v",
-    "message0": "ADS1115 voltaje V canal %1",
-    "args0": [{"type":"field_dropdown","name":"CHANNEL","options":[
-      ["A0","0"],["A1","1"],["A2","2"],["A3","3"]]}],
-    "output": "Number","colour": 160,
-    "tooltip": "Voltaje en Voltios (2 decimales).","helpUrl": ""
-  },
-  {
-    "type": "ADS1115_read_percent",
-    "message0": "ADS1115 porcentaje % canal %1",
-    "args0": [{"type":"field_dropdown","name":"CHANNEL","options":[
-      ["A0","0"],["A1","1"],["A2","2"],["A3","3"]]}],
-    "output": "Number","colour": 160,
-    "tooltip": "Porcentaje 0-100%.","helpUrl": ""
+Blockly.Blocks['ads1115_init'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Inicializar ADS1115 (I2C)");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#8E44AD");
+    this.setTooltip("Configura el módulo ADS1115 usando los pines I2C estándar de la KidBright (SDA=21, SCL=22).");
+    this.setHelpUrl("");
   }
-]);
+};
+
+Blockly.Blocks['ads1115_read'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Leer ADS1115 Canal")
+        .appendField(new Blockly.FieldDropdown([
+            ["A0", "0"], 
+            ["A1", "1"], 
+            ["A2", "2"], 
+            ["A3", "3"]
+        ]), "CHANNEL");
+    this.setOutput(true, "Number");
+    this.setColour("#8E44AD");
+    this.setTooltip("Devuelve la lectura digital de alta resolución (0 a 32767) del canal seleccionado.");
+    this.setHelpUrl("");
+  }
+};
