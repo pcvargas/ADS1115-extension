@@ -1,24 +1,18 @@
-Blockly.Python["ADS1115_begin"] = function(block) {
-  Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
-  return "ADS1115.begin(" + block.getFieldValue("ADDR") + ")\n";
+Blockly.Python['ads1115_init'] = function(block) {
+  Blockly.Python.definitions_['import_machine'] = 'import machine';
+  Blockly.Python.definitions_['import_ads1115'] = 'from ads1115 import ADS1115';
+  
+  // En las placas KidBright32, el bus I2C nativo usa SDA=21 y SCL=22
+  Blockly.Python.setups_['setup_ads1115'] = 'i2c_bus = machine.I2C(0, sda=machine.Pin(21), scl=machine.Pin(22))\nadc_ext = ADS1115(i2c_bus)';
+  return '';
 };
-Blockly.Python["ADS1115_set_gain"] = function(block) {
-  Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
-  return "ADS1115.set_gain(" + block.getFieldValue("GAIN") + ")\n";
-};
-Blockly.Python["ADS1115_read_raw"] = function(block) {
-  Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
-  return ["ADS1115.read_raw(" + block.getFieldValue("CHANNEL") + ")", Blockly.Python.ORDER_FUNCTION_CALL];
-};
-Blockly.Python["ADS1115_read_mv"] = function(block) {
-  Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
-  return ["ADS1115.read_voltage(" + block.getFieldValue("CHANNEL") + ")", Blockly.Python.ORDER_FUNCTION_CALL];
-};
-Blockly.Python["ADS1115_read_v"] = function(block) {
-  Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
-  return ["ADS1115.read_voltage_v(" + block.getFieldValue("CHANNEL") + ")", Blockly.Python.ORDER_FUNCTION_CALL];
-};
-Blockly.Python["ADS1115_read_percent"] = function(block) {
-  Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
-  return ["ADS1115.read_percent(" + block.getFieldValue("CHANNEL") + ")", Blockly.Python.ORDER_FUNCTION_CALL];
+
+Blockly.Python['ads1115_read'] = function(block) {
+  var dropdown_channel = block.getFieldValue('CHANNEL');
+  
+  Blockly.Python.definitions_['import_machine'] = 'import machine';
+  Blockly.Python.definitions_['import_ads1115'] = 'from ads1115 import ADS1115';
+  
+  var code = 'adc_ext.read(' + dropdown_channel + ')';
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
