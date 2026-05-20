@@ -1,4 +1,3 @@
-// blocks/generators_ADS1115.js
 Blockly.Python["ADS1115_begin"] = function(block) {
   Blockly.Python.definitions_["import_ADS1115"] = "import ADS1115";
   return "ADS1115.begin(" + block.getFieldValue("ADDR") + ")\n";
