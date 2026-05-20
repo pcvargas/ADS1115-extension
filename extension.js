@@ -1,7 +1,7 @@
 module.exports = {
-    id: "ads1115-extension", // ¡Obligatorio! Define el nombre de la carpeta de instalación
-    name: "ADS1115 Pro",
-    description: "Módulo ADC de alta precisión I2C para sensores analógicos",
+    id: "ads1115-extension",
+    name: "ADS1115 MicroPython",
+    description: "Módulo ADC de alta precisión I2C para sensores analógicos en MicroPython",
     category: "Sensores",
     author: "Pablo Vargas",
     version: "1.0.0",
