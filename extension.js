@@ -14,46 +14,53 @@ module.exports = {
         {
             opcode: "ads1115_init",
             blockType: "command",
-            messageId: "Inicializar ADS1115 I2C SDA %1 SCL %2",
-            args0: [
-                {
-                    type: "field_dropdown",
-                    name: "SDA",
-                    options: [ ["21","21"], ["22","22"], ["4","4"], ["5","5"] ]
+            text: "Inicializar ADS1115 I2C SDA [SDA] SCL [SCL]",
+            arguments: {
+                SDA: {
+                    type: "dropdown",
+                    options: {
+                        "21": "21",
+                        "22": "22",
+                        "4": "4",
+                        "5": "5"
+                    },
+                    default: "21"
                 },
-                {
-                    type: "field_dropdown",
-                    name: "SCL",
-                    options: [ ["22","22"], ["21","21"], ["14","14"], ["15","15"] ]
+                SCL: {
+                    type: "dropdown",
+                    options: {
+                        "22": "22",
+                        "21": "21",
+                        "14": "14",
+                        "15": "15"
+                    },
+                    default: "22"
                 }
-            ],
-            previousStatement: null,
-            nextStatement: null,
-            color: "#2C3E50",
-            tooltip: "Configura e inicializa el bus I2C para el módulo ADS1115 en la ESP32.",
-            generator: function(block, python) {
-                const sda = block.getFieldValue('SDA');
-                const scl = block.getFieldValue('SCL');
-                return `import machine\nfrom ads1115 import ADS1115\ni2c_bus = machine.I2C(0, sda=machine.Pin(${sda}), scl=machine.Pin(${scl}))\nadc_ext = ADS1115(i2c_bus)\n`;
+            },
+            generator: (args) => {
+                // Genera el código MicroPython mapeando directamente los argumentos limpios
+                return `import machine\nfrom ads1115 import ADS1115\ntry:\n    i2c_bus\nexcept NameError:\n    i2c_bus = machine.I2C(0, sda=machine.Pin(${args.SDA}), scl=machine.Pin(${args.SCL}))\nadc_ext = ADS1115(i2c_bus)\n`;
             }
         },
         {
             opcode: "ads1115_read",
             blockType: "reporter",
-            messageId: "Leer Canal %1 del ADS1115",
-            args0: [
-                {
-                    type: "field_dropdown",
-                    name: "CHANNEL",
-                    options: [ ["A0","0"], ["A1","1"], ["A2","2"], ["A3","3"] ]
+            text: "Leer Canal [CHANNEL] del ADS1115",
+            arguments: {
+                CHANNEL: {
+                    type: "dropdown",
+                    options: {
+                        "A0": "0",
+                        "A1": "1",
+                        "A2": "2",
+                        "A3": "3"
+                    },
+                    default: "0"
                 }
-            ],
-            output: "Number",
-            color: "#2C3E50",
-            tooltip: "Retorna el valor analógico crudo (0 a 32767) del canal seleccionado.",
-            generator: function(block, python) {
-                const channel = block.getFieldValue('CHANNEL');
-                return [`adc_ext.read_channel(${channel})`, 0];
+            },
+            generator: (args) => {
+                // En microBlock v3, los reporteros devuelven simplemente el string de la expresión
+                return `adc_ext.read_channel(${args.CHANNEL})`;
             }
         }
     ]
