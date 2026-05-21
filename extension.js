@@ -1,16 +1,17 @@
 module.exports = {
-    id: "ads1115-extension",
-    name: "ADS1115 MicroPython",
-    description: "Módulo ADC de alta precisión I2C para sensores analógicos en MicroPython",
-    category: "Sensores",
-    author: "Pablo Vargas",
+    id: "ads1115_esp32_adc",
+    name: "ADS1115 ADC 16-Bit",
+    description: "Extensión para leer canales analógicos de alta precisión usando el módulo ADS1115 e I2C en ESP32.",
     version: "1.0.0",
-    color: "#8E44AD",
-    icon: "icon.png",
+    author: "Pablo Cesar Vargas Diaz",
+    category: "Sensors",
+    color: "#2C3E50",
+    icon: "/static/icon.png",
     blocks: [
         "ads1115_init",
-        {
-            xml: `<block type="ads1115_read"><field name="CHANNEL">0</field></block>`
-        }
+        "ads1115_read"
+    ],
+    modules: [
+        "modules/ads1115.py"
     ]
 };
