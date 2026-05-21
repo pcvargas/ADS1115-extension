@@ -1,4 +1,3 @@
-import machine
 import time
 
 class ADS1115:
@@ -6,22 +5,26 @@ class ADS1115:
         self.i2c = i2c
         self.address = address
 
-    def read(self, channel=0):
-        # Configuración single-ended para canales 0-3 (Rango de 4.096V)
-        config = 0x8383 | ((4 + channel) << 12)
-        config_bytes = bytes([(config >> 8) & 0xFF, config & 0xFF])
+    def read_channel(self, channel):
+        # Configuración: Conversión única, Ganancia +/-4.096V, 128 muestras por segundo
+        # Desplazamos el canal (0-3) para activar los multiplexores correspondientes de A0 a A3
+        config = 0x8283 | ((channel + 4) << 12)
+        
+        data = bytearray(2)
+        data[0] = (config >> 8) & 0xFF
+        data[1] = config & 0xFF
         
         # Escribir en el registro de configuración (0x01)
-        self.i2c.writeto_mem(self.address, 0x01, config_bytes)
+        self.i2c.writeto_mem(self.address, 0x01, data)
         
-        # Esperar a que finalice la conversión de la señal (10ms)
+        # Tiempo prudencial para que finalice la conversión
         time.sleep_ms(10)
         
-        # Leer los 2 bytes del registro de conversión (0x00)
-        data = self.i2c.readfrom_mem(self.address, 0x00, 2)
-        value = (data[0] << 8) | data[1]
+        # Leer el registro de conversión de datos (0x00)
+        res = self.i2c.readfrom_mem(self.address, 0x00, 2)
+        val = (res[0] << 8) | res[1]
         
-        # Ajuste de signo para enteros de 16 bits
-        if value > 32767:
-            value -= 65536
-        return value
+        # Manejo del complemento a dos para lecturas negativas
+        if val > 32767:
+            val -= 65536
+        return val
